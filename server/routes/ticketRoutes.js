@@ -1,0 +1,11 @@
+const express = require("express");
+const { createTicket ,
+    getAllTicket,
+} = require("../controllers/ticketController");
+
+const router = express.Router();
+
+router.post("/", createTicket);
+router.get("/",getAllTicket);
+
+module.exports = router;
