@@ -52,8 +52,39 @@ const getTicketById = async (req,res) => {
     });
  };
 }
+
+const updateTicket = async (req,res) => {
+    try{
+        const ticket = await Ticket.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+
+        if(!ticket){
+            return  res.status(404).json({
+                success: false,
+                message : "Ticket not found",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message:"Ticket updated successfully",
+            data: ticket,
+        })
+    } catch(error){
+        res.status(500).json({
+            success : false,
+            message : error.message,
+        });
+    }
+};
 module.exports = {
     createTicket,
     getAllTickets,
     getTicketById,
+    updateTicket,
 };
