@@ -17,7 +17,27 @@ const createTicket = async(req,res) =>{
 }; 
 const getAllTickets = async(req,res) =>{
     try{
-        const tickets = await Ticket.find();
+        const filter = {};
+        if(req.query.status) {
+            filter.status = req.query.status;
+        }
+        if(req.query.search) {
+            filter.$or = [
+                {
+                    customerName :{
+                        $regex : req.query.search,
+                        $options : "i",
+                    },
+                },
+                {
+                    subject:{
+                        $regex: req.query.search,
+                        $options: "i",
+                    },
+                },
+            ];
+        }
+        const tickets = await Ticket.find(filter);
         res.status(200).json({
             success:true,
             count: tickets.length,
@@ -103,10 +123,42 @@ const deleteTicket = async (req, res) => {
     });
    }
 };
+const getTicketStats = async (req,res) => {
+    try {
+
+        const total = await Ticket.countDocuments();
+
+        const open = await Ticket.countDocuments({status : "Open"});
+
+        const inProgress = await Ticket.countDocuments({
+            status: "In progress",
+        });
+
+        const closed =await Ticket.countDocuments({
+            status:"Closed",
+        });
+
+        res.status(200).json({
+            success : true,
+            data :{
+                total,
+                open,
+                inProgress,
+                closed,
+            },
+        });
+    } catch(error){
+        res.status(500).json({
+            success : false,
+            message : error.message,
+        });
+    }
+};
 module.exports = {
     createTicket,
     getAllTickets,
     getTicketById,
     updateTicket,
     deleteTicket,
+    getTicketStats,
 };
