@@ -1,14 +1,38 @@
 import { useState} from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 function Login(){
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("");
 
+    const navigate = useNavigate();
+
+    const handlesubmit = async (e) =>{
+        e.preventDefault();
+
+        try{
+            const response = await api.post("/auth/login",{
+                email,
+                password,
+            });
+            console.log("LOGIN RESPONSE:" , response.data);
+            localStorage.setItem("token", response.data.token);
+
+            navigate("/dashboard");
+        }catch(error){
+            console.log("Login Error:", error);
+            console.log("Response:", error.response);
+            alert(error.response?.data?.message || error.message);
+        }
+    };
+
+
     return(
         <div>
             <h1>Support CRM Login</h1>
 
-            <form>
+            <form onSubmit={handlesubmit}>
                 <div>
                     <label>Email</label>
                     <br/>
@@ -17,6 +41,7 @@ function Login(){
                     placeholder="Enter email"
                     value={(email)}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                     ></input>
                 </div>
 
@@ -30,6 +55,7 @@ function Login(){
                     placeholder="Enter password"
                     value={(password)}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                     ></input>
                 </div>
 
