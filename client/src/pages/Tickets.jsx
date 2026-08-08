@@ -1,45 +1,77 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
-function Tickets(){
-    const [tickets, setTickets] =  useState([]);
+function Tickets() {
+  const [tickets, setTickets] = useState([]);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("All");
 
-    useEffect(() => {
-        const fetchtickets = async () =>{
-            try{
-                const response = await api.get("/tickets");
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const response = await api.get("/tickets");
 
-                console.log("TICKETS:" , response.data);
+        console.log("TICKETS:", response.data);
 
-                setTickets(response.data.data);
-            }catch(error){
-                console.log("TICKETS ERROR:" , error);
-            }
-        };
-        fetchtickets();
-   },[]);
+        setTickets(response.data.data);
+      } catch (error) {
+        console.log("TICKETS ERROR:", error);
+      }
+    };
 
-   return(
+    fetchTickets();
+  }, []);
+
+  const filteredTickets = tickets.filter((ticket) => {
+    const searchText = search.toLowerCase();
+
+    const matchesSearch =
+      ticket.ticketId.toLowerCase().includes(searchText) ||
+      ticket.customerName.toLowerCase().includes(searchText) ||
+      ticket.subject.toLowerCase().includes(searchText);
+
+    const matchesStatus =
+      status === "All" || ticket.status === status;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  return (
     <div>
-        <h1>Tickets</h1>
+      <h1>Tickets</h1>
 
-        {tickets.map((ticket) =>(
-            <div key={ticket._id}>
+      <input
+        type="text"
+        placeholder="Search tickets..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-                <h3>{ticket.ticketId}</h3>
+      <select
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+      >
+        <option value="All">All</option>
+        <option value="Open">Open</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Closed">Closed</option>
+      </select>
 
-                <p>Customer : {ticket.customerName}</p>
+      {filteredTickets.map((ticket) => (
+        <div key={ticket._id}>
+          <h3>{ticket.ticketId}</h3>
 
-                <p>Subject:{ticket.subject}</p>
+          <p>Customer: {ticket.customerName}</p>
 
-                <p>Status: {ticket.status}</p>
+          <p>Subject: {ticket.subject}</p>
 
-                <hr/>            
-                            
-                </div>
-        ))}
+          <p>Status: {ticket.status}</p>
+
+          <hr />
+        </div>
+      ))}
     </div>
-   );
+  );
 }
 
 export default Tickets;
