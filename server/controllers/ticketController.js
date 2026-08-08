@@ -1,20 +1,45 @@
 const Ticket = require("../models/Ticket");
-const createTicket = async(req,res) =>{
-    console.log(req.body);
-    try{
-        const ticket = await Ticket.create(req.body);
-        res.status(201).json({
-            success: true,
-            message: "Ticket created successfully",
-            data: ticket,
-        });
-    }catch(error){
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+const createTicket = async (req, res) => {
+  console.log("BODY:", req.body);
+
+  try {
+    const lastTicket = await Ticket.findOne({
+      ticketId: { $regex: /^TKT-\d+$/ }
+    }).sort({ ticketId: -1 });
+
+    let nextNumber = 1001;
+
+    if (lastTicket) {
+      const lastNumber = parseInt(
+        lastTicket.ticketId.replace("TKT-", ""),
+        10
+      );
+
+      nextNumber = lastNumber + 1;
     }
-}; 
+
+    const ticketId = `TKT-${nextNumber}`;
+
+    const ticket = await Ticket.create({
+      ...req.body,
+      ticketId,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Ticket created successfully",
+      data: ticket,
+    });
+
+  } catch (error) {
+    console.log("CREATE TICKET ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 const getAllTickets = async(req,res) =>{
     try{
         const filter = {};
