@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./Tickets.css";
 
 function Tickets() {
   const location = useLocation();
@@ -40,6 +41,20 @@ function Tickets() {
     fetchTickets();
   }, []);
 
+  const handleDelete = async (id) => {
+      try{
+        const response = await api.delete(`/tickets/${id}`);
+
+        console.log("DELETE TICKET :", response.data);
+        setTickets((prevTickets) => 
+        prevTickets.filter((ticket) => ticket._id !== id)
+      );
+      }catch(error){
+        console.log("DELETE TICKET ERROR", error);
+        console.log("SERVER RESPONSE:", error.response?.data);
+      }
+    };
+
   const filteredTickets = tickets.filter((ticket) => {
     const searchText = search.toLowerCase();
 
@@ -52,6 +67,8 @@ function Tickets() {
       status === "All" || ticket.status === status;
 
     return matchesSearch && matchesStatus;
+
+    
   });
 
   return (
@@ -84,8 +101,9 @@ function Tickets() {
 
       {/* Tickets */}
       {filteredTickets.map((ticket) => (
-        <div key={ticket._id}>
-          <h3>{ticket.ticketId || "No Ticket ID"}</h3>
+        <div  className ="ticket-card" key={ticket._id}>
+          <h3 className="ticket-id">
+            {ticket.ticketId || "No Ticket ID"}</h3>
 
           <p>
             Customer: {ticket.customerName}
@@ -99,11 +117,23 @@ function Tickets() {
             Status: {ticket.status}
           </p>
 
-          <button onClick={() => navigate(`/tickets/edit/${ticket._id}`)}>
+        <div className="ticket-actions">
+
+          <button 
+          className="edit-btn"
+          onClick={() => navigate(`/tickets/edit/${ticket._id}`)}>
             Edit
           </button>
 
-          <hr />
+          <button 
+          className="delete-btn"
+          onClick={() => handleDelete(ticket._id)}>
+            Delete
+          </button>
+
+        
+        </div>
+        <hr/>
         </div>
       ))}
     </div>

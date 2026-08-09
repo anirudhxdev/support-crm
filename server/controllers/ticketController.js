@@ -129,7 +129,7 @@ const updateTicket = async (req,res) => {
 };
 const deleteTicket = async (req, res) => {
    try{
-     const ticket = await Ticket.findByIdAndUpdate(req.params.id);
+     const ticket = await Ticket.findByIdAndDelete(req.params.id);
 
      if(!ticket){
         return res.status(404).json({

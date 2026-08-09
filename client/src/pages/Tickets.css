@@ -1,0 +1,43 @@
+.ticket-card{
+    background-color: #ffffff; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.ticket-id{
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.ticket-card p{
+    margin: 8px 0 ;
+    color: #555;
+}
+.ticket-actions{
+    display: flex;
+    gap:10px;
+    margin-top: 15px;
+}
+.edit-btn,
+.delete-btn{
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.edit-btn{
+    background-color: #2563eb;
+    color: white;
+}
+.delete-btn{
+    background-color: #dc2626;
+    color: white;
+}
+.edit-btn:hover,
+.delete-btn:hover{
+    opacity: 0.85;
+}
