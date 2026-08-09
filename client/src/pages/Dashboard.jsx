@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import "./Dashboard.css";
 
 function Dashboard(){
     const [stats, setStats] = useState(null);
@@ -21,15 +22,35 @@ function Dashboard(){
     },[]);
 
     return(
-        <div>
+        <div className="dashboard">
+
             <h1>Dashboard</h1>
 
-            {stats && (
-                <div>
-                    <p> Total Tickets : {stats.total}</p>
-                    <p> Open: {stats.open}</p>
-                    <p> In progress: {stats.inProgress}</p>
-                    <p> Close: {stats.closed}</p>
+            {!stats ?(
+                <p>Loading dashboard...</p>
+            ) :(
+                <div className="stats-container">
+
+                    <div className="stat-card">
+                        <h3>Total Tickets</h3>
+                        <p>{stats.total}</p>
+                    </div>
+
+                    <div className="stat-card">
+                         <h3>Open</h3>
+                        <p>{stats.open}</p>
+                    </div>
+
+                    <div className="stat-card">
+                        <h3>In Progress</h3>
+                        <p>{stats.inProgress}</p>
+                    </div>
+
+                    <div className="stat-card">
+                        <h3>Closed</h3>
+                        <p>{stats.closed}</p>
+                    </div>
+
                 </div>
             )}
         </div>

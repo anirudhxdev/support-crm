@@ -1,6 +1,7 @@
 import api from "../services/api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./TicketForm.css";
 
 function CreateTicket(){
      
@@ -37,69 +38,75 @@ function CreateTicket(){
   console.log("SERVER RESPONSE:", error.response?.data);
 }
 };
-    return(
-        <div>
-        <h1> Create Ticket</h1>
-      
-        <form onSubmit={handleSubmit}>
+return(
+       
+  <div className="ticket-form-page">
+    <h1>Create Ticket</h1>
 
-            <div>
-                <label>Customer Name:</label>
-                <input type="text"
-                value={formData.customerName}
-                onChange={(e) =>
-                setFormData ({
-                    ...formData,
-                    customerName: e.target.value,
-                })
-            }
-            />
-            </div>
+    <form className="ticket-form" onSubmit={handleSubmit}>
 
-            <div>
-                <label>Customer Email:</label>
-                <input type="email"
-                value={formData.customerEmail}
-                onChange={(e) =>
-                    setFormData({
-                        ...formData,
-                    customerEmail: e.target.value,
-                    })
-                }
-                />
-            </div>
+      <div className="form-group">
+        <label>Customer Name :</label>
+        <input
+          type="text"
+          value={formData.customerName}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              customerName: e.target.value,
+            })
+          }
+        />
+      </div>
 
-            <div>
-                <label>Subject:</label>
-                <input type="text"
-                value={formData.subject}
-                onChange={(e) =>
-                    setFormData({
-                        ...formData,
-                        subject: e.target.value,
-                    })
-                }
-                />
-            </div>
+      <div className="form-group">
+        <label>Customer Email :</label>
+        <input
+          type="email"
+          value={formData.customerEmail}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              customerEmail: e.target.value,
+            })
+          }
+        />
+      </div>
 
-            <div>
-                <label>Description:</label>
-                <textarea
-                value={formData.description}
-                onChange={(e) =>
-                 setFormData({
-                    ...formData,
-                    description: e.target.value,
-                 })
-                }
-                />
-            </div>
+      <div className="form-group">
+        <label>Subject :</label>
+        <input
+          type="text"
+          value={formData.subject}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              subject: e.target.value,
+            })
+          }
+        />
+      </div>
 
-            <button type="submit">
-                Create Ticket
-            </button>
-        </form>
-    </div>
-    );
+      <div className="form-group">
+        <label>Description :</label>
+        <textarea
+          value={formData.description}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              description: e.target.value,
+            })
+          }
+        />
+      </div>
+
+      <button className="submit-btn" type="submit">
+        Create Ticket
+      </button>
+
+    </form>
+  </div>
+);
+    
 }
 export default CreateTicket;

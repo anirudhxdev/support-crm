@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
+import "./TicketForm.css";
 
 function EditTicket(){
 
@@ -44,50 +45,55 @@ function EditTicket(){
         }
     };
     return (
-        
-        <div>
+        <div className="ticket-form-page">
 
             <h1>Edit Ticket</h1>
 
-            <p>Ticket ID:{ticket.ticketId}</p>
+            <p className="form-subtitle">
+            Update the customer's ticket details
+            </p>
 
-            <form onSubmit={handleSubmit}>
+            <form className="ticket-form" onSubmit={handleSubmit}>
 
-            <div>
-                <label>Customer Name:</label>
+            <div className="form-group">
+                <label>Ticket ID</label>
+                <input
+                type="text"
+                value={ticket.ticketId}
+                disabled
+                />
+            </div>
 
+            <div className="form-group">
+                <label>Customer Name</label>
                 <input
                 type="text"
                 value={ticket.customerName}
                 onChange={(e) =>
                     setTicket({
-                        ...ticket,
+                    ...ticket,
                     customerName: e.target.value,
                     })
                 }
                 />
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Customer Email</label>
-
                 <input
                 type="email"
                 value={ticket.customerEmail}
                 onChange={(e) =>
-                setTicket({
-                ...ticket,
+                    setTicket({
+                    ...ticket,
                     customerEmail: e.target.value,
                     })
                 }
                 />
             </div>
 
-            
-
-            <div>
-                <label>Subject:</label>
-
+            <div className="form-group">
+                <label>Subject</label>
                 <input
                 type="text"
                 value={ticket.subject}
@@ -100,8 +106,8 @@ function EditTicket(){
                 />
             </div>
 
-            <div>
-                <label>Description:</label>
+            <div className="form-group">
+                <label>Description</label>
                 <textarea
                 value={ticket.description}
                 onChange={(e) =>
@@ -113,33 +119,30 @@ function EditTicket(){
                 />
             </div>
 
-            <div>
-                <label>Status:</label>
+            <div className="form-group">
+                <label>Status</label>
 
                 <select
-                 value={ticket.status}
-                 onChange={(e) =>
+                value={ticket.status}
+                onChange={(e) =>
                     setTicket({
                     ...ticket,
                     status: e.target.value,
                     })
-                 }
-
+                }
                 >
-                    <option value="Open">Open</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Closed">Closed</option>
-
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Closed">Closed</option>
                 </select>
+            </div>
 
-                <button type="submit">
-                    Save Changes
-                </button>
+            <button className="submit-btn" type="submit">
+                Save Changes
+            </button>
 
-                </div>
             </form>
-
-        </div>     
-    );
+        </div>
+        );
 }
 export default EditTicket;
