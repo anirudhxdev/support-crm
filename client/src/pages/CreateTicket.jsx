@@ -1,7 +1,10 @@
 import api from "../services/api";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function CreateTicket(){
      
+    const navigate = useNavigate();
     const [formData , setFormData] = useState({
         customerName:"",
         customerEmail:"",
@@ -16,6 +19,19 @@ function CreateTicket(){
     const response = await api.post("/tickets", formData);
      
     console.log("CREATE TICKET:", response.data);
+
+    
+    setFormData({
+     customerName: "",
+     customerEmail: "",
+     subject: "",
+     description: "",
+    });
+    navigate("/tickets", {
+  state: {
+    successMessage: "Ticket created successfully!",
+  },
+});
    } catch (error) {
   console.log("CREATE TICKET ERROR:", error);
   console.log("SERVER RESPONSE:", error.response?.data);
@@ -24,7 +40,7 @@ function CreateTicket(){
     return(
         <div>
         <h1> Create Ticket</h1>
-
+      
         <form onSubmit={handleSubmit}>
 
             <div>
