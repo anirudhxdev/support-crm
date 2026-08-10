@@ -12,10 +12,23 @@ function CreateTicket() {
     customerEmail: "",
     subject: "",
     description: "",
+    status: "Open",
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
 
     try {
       const response = await api.post("/tickets", formData);
@@ -27,6 +40,7 @@ function CreateTicket() {
         customerEmail: "",
         subject: "",
         description: "",
+        status: "Open",
       });
 
       navigate("/tickets", {
@@ -37,86 +51,136 @@ function CreateTicket() {
     } catch (error) {
       console.log("CREATE TICKET ERROR:", error);
       console.log("SERVER RESPONSE:", error.response?.data);
+
+      setErrorMessage(
+        error.response?.data?.message ||
+          "Failed to create ticket. Please try again."
+      );
     }
   };
 
   return (
     <>
+      {/* Navigation Bar */}
       <Navbar />
 
+      {/* Create Ticket Page */}
       <div className="ticket-form-page">
-        <h1>Create Ticket</h1>
+        <div className="ticket-form-container">
 
-        <form className="ticket-form" onSubmit={handleSubmit}>
-
-          <div className="form-group">
-            <label>Customer Name :</label>
-
-            <input
-              type="text"
-              value={formData.customerName}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  customerName: e.target.value,
-                })
-              }
-              required
-            />
+          <div className="ticket-form-header">
+            <h1>Create Ticket</h1>
+            <p>Create a new customer support ticket.</p>
           </div>
 
-          <div className="form-group">
-            <label>Customer Email :</label>
+          {errorMessage && (
+            <div className="ticket-error">
+              {errorMessage}
+            </div>
+          )}
 
-            <input
-              type="email"
-              value={formData.customerEmail}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  customerEmail: e.target.value,
-                })
-              }
-              required
-            />
-          </div>
+          <form
+            className="ticket-form"
+            onSubmit={handleSubmit}
+          >
 
-          <div className="form-group">
-            <label>Subject :</label>
+            {/* Customer Name */}
+            <div className="form-group">
+              <label htmlFor="customerName">
+                Customer Name
+              </label>
 
-            <input
-              type="text"
-              value={formData.subject}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  subject: e.target.value,
-                })
-              }
-              required
-            />
-          </div>
+              <input
+                id="customerName"
+                name="customerName"
+                type="text"
+                placeholder="Enter customer name"
+                value={formData.customerName}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <div className="form-group">
-            <label>Description :</label>
+            {/* Customer Email */}
+            <div className="form-group">
+              <label htmlFor="customerEmail">
+                Customer Email
+              </label>
 
-            <textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  description: e.target.value,
-                })
-              }
-              required
-            />
-          </div>
+              <input
+                id="customerEmail"
+                name="customerEmail"
+                type="email"
+                placeholder="Enter customer email"
+                value={formData.customerEmail}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <button className="submit-btn" type="submit">
-            Create Ticket
-          </button>
+            {/* Subject */}
+            <div className="form-group">
+              <label htmlFor="subject">
+                Subject
+              </label>
 
-        </form>
+              <input
+                id="subject"
+                name="subject"
+                type="text"
+                placeholder="Enter ticket subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Description */}
+            <div className="form-group">
+              <label htmlFor="description">
+                Description
+              </label>
+
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Describe the customer's issue..."
+                value={formData.description}
+                onChange={handleChange}
+                rows="6"
+                required
+              />
+            </div>
+
+            {/* Status */}
+            <div className="form-group">
+              <label htmlFor="status">
+                Status
+              </label>
+
+              <select
+                id="status"
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+              >
+                <option value="Open">Open</option>
+                <option value="In Progress">
+                  In Progress
+                </option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+
+            <button
+              className="submit-btn"
+              type="submit"
+            >
+              Create Ticket
+            </button>
+
+          </form>
+        </div>
       </div>
     </>
   );

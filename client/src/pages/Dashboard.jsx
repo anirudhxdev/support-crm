@@ -5,25 +5,45 @@ import Navbar from "../components/Navbar";
 
 function Dashboard() {
   const [stats, setStats] = useState(null);
+  const [recentTickets, setRecentTickets] = useState([]);
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const response = await api.get("/tickets/stats");
+        // Fetch ticket statistics
+        const statsResponse = await api.get("/tickets/stats");
 
-        console.log("STATS:", response.data);
+        console.log("STATS:", statsResponse.data);
 
-        setStats(response.data.data);
+        setStats(statsResponse.data.data);
+
+        // Fetch all tickets
+        const ticketsResponse = await api.get("/tickets");
+
+        console.log("TICKETS:", ticketsResponse.data);
+
+        // Get latest 5 tickets
+        const tickets = ticketsResponse.data.data || [];
+
+        const latestTickets = tickets
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt) - new Date(a.createdAt)
+          )
+          .slice(0, 5);
+
+        setRecentTickets(latestTickets);
       } catch (error) {
-        console.log("STATS ERROR:", error);
+        console.log("DASHBOARD ERROR:", error);
+        console.log("RESPONSE:", error.response);
       }
     };
 
-    fetchStats();
+    fetchDashboardData();
   }, []);
 
   return (
-    <div>
+    <>
       <Navbar />
 
       <div className="dashboard">
@@ -32,6 +52,7 @@ function Dashboard() {
           <h1>Dashboard</h1>
         </div>
 
+        {/* Statistics */}
         {!stats ? (
           <p>Loading dashboard...</p>
         ) : (
@@ -60,8 +81,54 @@ function Dashboard() {
           </div>
         )}
 
+        {/* Recent Tickets */}
+        <div className="recent-tickets">
+
+          <div className="recent-tickets-header">
+            <h2>Recent Tickets</h2>
+          </div>
+
+          {recentTickets.length === 0 ? (
+            <p>No tickets found.</p>
+          ) : (
+            <div className="tickets-list">
+
+              {recentTickets.map((ticket) => (
+                <div
+                  className="ticket-card"
+                  key={ticket._id}
+                >
+
+                  <div className="ticket-info">
+                    <h3>{ticket.ticketId}</h3>
+
+                    <p>
+                      <strong>Customer:</strong>{" "}
+                      {ticket.customerName}
+                    </p>
+
+                    <p>
+                      <strong>Subject:</strong>{" "}
+                      {ticket.subject}
+                    </p>
+                  </div>
+
+                  <div className="ticket-status">
+                    <span>
+                      {ticket.status}
+                    </span>
+                  </div>
+
+                </div>
+              ))}
+
+            </div>
+          )}
+
+        </div>
+
       </div>
-    </div>
+    </>
   );
 }
 
