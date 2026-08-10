@@ -115,7 +115,7 @@
 .login-form-group input:focus {
   outline: none;
 
-  /
+  border-color: #2563eb;
 
   box-shadow:
     0 0 0 3px rgba(37, 99, 235, 0.12);
@@ -164,6 +164,19 @@
 
 .login-btn:active {
   transform: translateY(0);
+}
+.login-error {
+  margin: 0 0 20px;
+  padding: 10px 12px;
+
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  background: #fef2f2;
+  color: #dc2626;
+
+  font-size: 14px;
+  text-align: center;
 }
 
 @media (max-width: 500px) {

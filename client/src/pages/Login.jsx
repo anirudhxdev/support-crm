@@ -6,6 +6,7 @@ import "./Login.css";
 function Login(){
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const navigate = useNavigate();
 
@@ -21,10 +22,13 @@ function Login(){
             localStorage.setItem("token", response.data.token);
 
             navigate("/dashboard");
-        }catch(error){
+        }catch (error) {
             console.log("Login Error:", error);
             console.log("Response:", error.response);
-            alert(error.response?.data?.message || error.message);
+
+            setErrorMessage(
+                error.response?.data?.message || "Invalid email or password"
+            );
         }
     };
 
@@ -41,36 +45,41 @@ function Login(){
 
       <form onSubmit={handlesubmit}>
 
-        <div className="login-form-group">
-          <label>Email</label>
+        {errorMessage && (
+            <p className="login-error">
+            {errorMessage}
+            </p>
+        )}
 
-          <input
+        <div className="login-form-group">
+            <label>Email</label>
+
+            <input
             type="email"
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-          />
+            />
         </div>
 
         <div className="login-form-group">
-          <label>Password</label>
+            <label>Password</label>
 
-          <input
+            <input
             type="password"
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-          />
+            />
         </div>
 
         <button className="login-btn" type="submit">
-          Login
+            Login
         </button>
 
-      </form>
-
+        </form>
     </div>
 
   </div>
