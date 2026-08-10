@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import "./Dashboard.css";
 
 function Dashboard(){
-    const [stats, setStats] = useState(null);
+    
+  const navigate = useNavigate();
+  const [stats, setStats] = useState(null);
+
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  navigate("/", { replace: true });
+    };
 
     useEffect(() => {
         const fethcStates = async () => {
@@ -24,8 +32,16 @@ function Dashboard(){
     return(
         <div className="dashboard">
 
-            <h1>Dashboard</h1>
+           <div className="dashboard-header">
+                <h1>Dashboard</h1>
 
+                <button
+                className="logout-btn"
+                onClick={handleLogout}
+                >
+                Logout
+                </button>
+            </div>
             {!stats ?(
                 <p>Loading dashboard...</p>
             ) :(
