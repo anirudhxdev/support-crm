@@ -2,29 +2,32 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Tickets.css";
+import Navbar from "../components/Navbar";
 
 function Tickets() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [tickets, setTickets] = useState([]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
-  const navigate = useNavigate();
 
- 
-  const successMessage = location.state?.successMessage;
-  
   const [message, setMessage] = useState(
     location.state?.successMessage || ""
   );
+
+  // Auto-hide success message
   useEffect(() => {
-    if(message){
-      const timer = setTimeout(() =>{
+    if (message) {
+      const timer = setTimeout(() => {
         setMessage("");
-      },3000);
-      return () => clearTimeout (timer);
+      }, 3000);
+
+      return () => clearTimeout(timer);
     }
   }, [message]);
+
+  // Fetch tickets
   useEffect(() => {
     const fetchTickets = async () => {
       try {
@@ -41,20 +44,23 @@ function Tickets() {
     fetchTickets();
   }, []);
 
+  // Delete ticket
   const handleDelete = async (id) => {
-      try{
-        const response = await api.delete(`/tickets/${id}`);
+    try {
+      const response = await api.delete(`/tickets/${id}`);
 
-        console.log("DELETE TICKET :", response.data);
-        setTickets((prevTickets) => 
+      console.log("DELETE TICKET:", response.data);
+
+      setTickets((prevTickets) =>
         prevTickets.filter((ticket) => ticket._id !== id)
       );
-      }catch(error){
-        console.log("DELETE TICKET ERROR", error);
-        console.log("SERVER RESPONSE:", error.response?.data);
-      }
-    };
+    } catch (error) {
+      console.log("DELETE TICKET ERROR:", error);
+      console.log("SERVER RESPONSE:", error.response?.data);
+    }
+  };
 
+  // Search + status filter
   const filteredTickets = tickets.filter((ticket) => {
     const searchText = search.toLowerCase();
 
@@ -67,75 +73,91 @@ function Tickets() {
       status === "All" || ticket.status === status;
 
     return matchesSearch && matchesStatus;
-
-    
   });
 
   return (
     <div>
-      <h1>Tickets</h1>
+      <Navbar />
 
-      
-     {message && (
-  <p>{message}</p>
-   )}
+      <div className="tickets-page">
 
-      
-      <input
-        type="text"
-        placeholder="Search tickets..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        <h1>Tickets</h1>
 
-      
-      <select
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-      >
-        <option value="All">All</option>
-        <option value="Open">Open</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Closed">Closed</option>
-      </select>
+        {/* Success message */}
+        {message && (
+          <div className="success-message">
+            {message}
+          </div>
+        )}
 
-      {/* Tickets */}
-      {filteredTickets.map((ticket) => (
-        <div  className ="ticket-card" key={ticket._id}>
-          <h3 className="ticket-id">
-            {ticket.ticketId || "No Ticket ID"}</h3>
+        {/* Search */}
+        <input
+          type="text"
+          placeholder="Search tickets..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-          <p>
-            Customer: {ticket.customerName}
-          </p>
+        {/* Status filter */}
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="All">All</option>
+          <option value="Open">Open</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Closed">Closed</option>
+        </select>
 
-          <p>
-            Subject: {ticket.subject}
-          </p>
+        {/* Tickets */}
+        {filteredTickets.map((ticket) => (
+          <div
+            className="ticket-card"
+            key={ticket._id}
+          >
+            <h3 className="ticket-id">
+              {ticket.ticketId || "No Ticket ID"}
+            </h3>
 
-          <p>
-            Status: {ticket.status}
-          </p>
+            <p>
+              Customer: {ticket.customerName}
+            </p>
 
-        <div className="ticket-actions">
+            <p>
+              Subject: {ticket.subject}
+            </p>
 
-          <button 
-          className="edit-btn"
-          onClick={() => navigate(`/tickets/edit/${ticket._id}`)}>
-            Edit
-          </button>
+            <p>
+              Status: {ticket.status}
+            </p>
 
-          <button 
-          className="delete-btn"
-          onClick={() => handleDelete(ticket._id)}>
-            Delete
-          </button>
+            <div className="ticket-actions">
 
-        
-        </div>
-        <hr/>
-        </div>
-      ))}
+              <button
+                className="edit-btn"
+                onClick={() =>
+                  navigate(`/tickets/edit/${ticket._id}`)
+                }
+              >
+                Edit
+              </button>
+
+              <button
+                className="delete-btn"
+                onClick={() =>
+                  handleDelete(ticket._id)
+                }
+              >
+                Delete
+              </button>
+
+            </div>
+
+            <hr />
+          </div>
+        ))}
+
+      </div>
     </div>
   );
 }
