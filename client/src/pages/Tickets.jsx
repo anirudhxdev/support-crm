@@ -76,7 +76,7 @@ function Tickets() {
   });
 
   return (
-    <div>
+    <>
       <Navbar />
 
       <div className="tickets-page">
@@ -109,56 +109,80 @@ function Tickets() {
           <option value="Closed">Closed</option>
         </select>
 
-        {/* Tickets */}
-        {filteredTickets.map((ticket) => (
-          <div
-            className="ticket-card"
-            key={ticket._id}
-          >
-            <h3 className="ticket-id">
-              {ticket.ticketId || "No Ticket ID"}
-            </h3>
+        {/* Tickets / Empty state */}
+        {filteredTickets.length === 0 ? (
+
+          <div className="empty-state">
+            <h3>No tickets found</h3>
 
             <p>
-              Customer: {ticket.customerName}
+              Try changing your search or status filter.
             </p>
+          </div>
 
-            <p>
-              Subject: {ticket.subject}
-            </p>
+        ) : (
 
-            <p>
-              Status: {ticket.status}
-            </p>
+          filteredTickets.map((ticket) => (
+            <div
+              className="ticket-card"
+              key={ticket._id}
+            >
 
-            <div className="ticket-actions">
+              <h3 className="ticket-id">
+                {ticket.ticketId || "No Ticket ID"}
+              </h3>
 
-              <button
-                className="edit-btn"
-                onClick={() =>
-                  navigate(`/tickets/edit/${ticket._id}`)
-                }
-              >
-                Edit
-              </button>
+              <p>
+                Customer: {ticket.customerName}
+              </p>
 
-              <button
-                className="delete-btn"
-                onClick={() =>
-                  handleDelete(ticket._id)
-                }
-              >
-                Delete
-              </button>
+              <p>
+                Subject: {ticket.subject}
+              </p>
+
+              <p className="ticket-status">
+                Status:
+
+                <span
+                  className={`status-badge ${ticket.status
+                    .toLowerCase()
+                    .replace(" ", "-")}`}
+                >
+                  {ticket.status}
+                </span>
+              </p>
+
+              <div className="ticket-actions">
+
+                <button
+                  className="edit-btn"
+                  onClick={() =>
+                    navigate(`/tickets/edit/${ticket._id}`)
+                  }
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="delete-btn"
+                  onClick={() =>
+                    handleDelete(ticket._id)
+                  }
+                >
+                  Delete
+                </button>
+
+              </div>
+
+              <hr />
 
             </div>
+          ))
 
-            <hr />
-          </div>
-        ))}
+        )}
 
       </div>
-    </div>
+    </>
   );
 }
 
