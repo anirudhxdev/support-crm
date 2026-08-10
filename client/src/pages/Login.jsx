@@ -1,6 +1,7 @@
 import { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "./Login.css";
 
 function Login(){
     const [email , setEmail] = useState("");
@@ -28,44 +29,51 @@ function Login(){
     };
 
 
-    return(
-        <div>
-            <h1>Support CRM Login</h1>
+    return (
+  <div className="login-page">
 
-            <form onSubmit={handlesubmit}>
-                <div>
-                    <label>Email</label>
-                    <br/>
-                    <input
-                    type="email"
-                    placeholder="Enter email"
-                    value={(email)}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    ></input>
-                </div>
+    <div className="login-card">
 
-                <br/>
+      <div className="login-header">
+        <h1>Support CRM</h1>
+        <p>Welcome back! Please login to your account.</p>
+      </div>
 
-                <div>
-                    <label>Password</label>
-                    <br/>
-                    <input
-                    type="password"
-                    placeholder="Enter password"
-                    value={(password)}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    ></input>
-                </div>
+      <form onSubmit={handlesubmit}>
 
-                <br/>
+        <div className="login-form-group">
+          <label>Email</label>
 
-                <button type="submit">
-                    Login
-                </button>
-            </form>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
-    );
+
+        <div className="login-form-group">
+          <label>Password</label>
+
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <button className="login-btn" type="submit">
+          Login
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+);
 }
 export default Login;

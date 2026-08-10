@@ -156,7 +156,7 @@ const getTicketStats = async (req,res) => {
         const open = await Ticket.countDocuments({status : "Open"});
 
         const inProgress = await Ticket.countDocuments({
-            status: "In progress",
+            status: "In Progress",
         });
 
         const closed =await Ticket.countDocuments({
