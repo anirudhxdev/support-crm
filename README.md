@@ -110,3 +110,20 @@ Support CRM
 │   └── package.json
 │
 └── README.md
+## 📸 Screenshots
+
+### 🔐 Login
+
+![Login Page](screenshots/Login.png)
+
+### 📊 Dashboard
+
+![Dashboard](screenshots/Dashboard.png)
+
+### 🎫 Tickets
+
+![Tickets](screenshots/Tickets.png)
+
+### ➕ Create Ticket
+
+![Create Ticket](screenshots/Create-Ticket.png)
