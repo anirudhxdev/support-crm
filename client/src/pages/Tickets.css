@@ -234,3 +234,28 @@
         width: 100%;
     }
 }
+.tickets-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tickets-page > input,
+.tickets-page > select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tickets-page > select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.edit-btn,
+.delete-btn {
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  transform: translateY(-1px);
+}

@@ -144,6 +144,42 @@
   text-align: center;
   color: #6b7280;
 }
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stat-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.ticket-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ticket-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 16px;
+  }
+
+  .stat-card p {
+    font-size: 28px;
+  }
+
+  .ticket-card {
+    padding: 16px;
+  }
+}
 
 /* =========================
    Responsive Design
